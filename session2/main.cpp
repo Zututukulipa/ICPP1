@@ -13,5 +13,7 @@ int main() {
     auto a = pokladna->dejCastku();
     auto b = pokladna->dejCastkuVcDph();
     auto c = pokladna->dejUctenku(1003);
+    std::cout << a << std::endl << b << '\n' << c.getCastka() << " " << c.getDph() << std::endl;
+    delete pokladna;
     return 0;
 }

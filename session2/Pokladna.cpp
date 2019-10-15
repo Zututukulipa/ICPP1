@@ -6,7 +6,7 @@ int Pokladna::citacId = 1000;
 Uctenka& Pokladna::vystavUctenku(double cena, double dph) {
     try {
         if (velikost <= pocetVydanychUctenek)
-            throw -1;
+            throw std::overflow_error("Pokladna je plna");
     }
     catch (int e) { std::cout << "Err " << e << std::endl; }
     auto uctenka = new Uctenka(cena, dph, citacId++);
@@ -50,3 +50,4 @@ Pokladna::Pokladna(int velikostPole){
 }
 
 
+Pokladna::~Pokladna() = default;
