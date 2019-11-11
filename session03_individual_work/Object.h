@@ -1,7 +1,3 @@
-//
-// Created by Zututukulipa on 11/10/2019.
-//
-
 #ifndef SESSION03_INDIVIDUAL_WORK_OBJECT_H
 #define SESSION03_INDIVIDUAL_WORK_OBJECT_H
 
@@ -13,7 +9,8 @@ class Object {
 public:
     int getId() const;
 
-public:
+	Object();
+	Object(int id, double x, double y);
     double getX() const;
 
     void setX(double x);
@@ -22,10 +19,8 @@ public:
 
     void setY(double y);
 
-public:
     virtual ~Object();
 
-public:
     Object(int id);
 };
 

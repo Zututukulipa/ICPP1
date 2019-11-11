@@ -1,13 +1,26 @@
-//
-// Created by Zututukulipa on 11/10/2019.
-//
-
 #include "Object.h"
 
-Object::Object(int id) : id(id) {}
+Object::Object(int id):id(id){
+	this->x = 0;
+	this->y = 0;
+}
 
 Object::~Object() {
 
+}
+
+Object::Object()
+{
+	id = 0;
+	x = 12;
+	y = 12;
+}
+
+Object::Object(int id, double x, double y)
+{
+	this->id = id;
+	this->x = x;
+	this->y = y;
 }
 
 double Object::getX() const {

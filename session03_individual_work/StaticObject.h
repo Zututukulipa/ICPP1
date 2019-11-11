@@ -1,27 +1,20 @@
-//
-// Created by Zututukulipa on 11/10/2019.
-//
-
 #ifndef SESSION03_INDIVIDUAL_WORK_STATICOBJECT_H
 #define SESSION03_INDIVIDUAL_WORK_STATICOBJECT_H
 
 
 #include "Object.h"
 
-enum ObstacleType {
+enum class ObstacleType {
     rock, small_plant, big_plant
 };
 
-class StaticObject : Object {
+class StaticObject : public Object {
+private:
     ObstacleType obstacleType;
-
-    StaticObject(int id, ObstacleType typeOfObstacle);
-
 public:
-    ObstacleType getObstacleType() const {
-        return obstacleType;
-    }
-
+	StaticObject(int id, ObstacleType typeOfObstacle);
+	~StaticObject();
+	ObstacleType getObstacleType() const;
 };
 
 

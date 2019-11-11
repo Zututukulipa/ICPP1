@@ -1,9 +1,14 @@
-//
-// Created by Zututukulipa on 11/10/2019.
-//
-
 #include "StaticObject.h"
 
 StaticObject::StaticObject(int id, ObstacleType typeOfObstacle) : Object(id) {
+	this->obstacleType = typeOfObstacle;
+}
 
+StaticObject::~StaticObject()
+{
+}
+
+ObstacleType StaticObject::getObstacleType() const
+{
+	return  obstacleType;
 }

@@ -1,7 +1,3 @@
-//
-// Created by Zututukulipa on 11/10/2019.
-//
-
 #ifndef SESSION03_INDIVIDUAL_WORK_MOVINGOBJECT_H
 #define SESSION03_INDIVIDUAL_WORK_MOVINGOBJECT_H
 
@@ -11,11 +7,12 @@
 class MovingObject: public Object {
 public:
     double getAzimut() const;
-
+	MovingObject();
+	MovingObject(double azimut);
+	MovingObject(double azimut, int id, int x, int y);
+	virtual ~MovingObject();
 private:
     double azimut;
-
-
 };
 
 

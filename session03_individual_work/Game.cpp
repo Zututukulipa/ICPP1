@@ -1,19 +1,31 @@
-//
-// Created by Zututukulipa on 11/10/2019.
-//
-
 #include <cmath>
 #include "Game.h"
 #include "StaticObject.h"
 
+int Game::amountOfObjects = 0;
+
+Game::Game()
+{
+	this->sizeOfArray = 100;
+	objects = new Object*[sizeOfArray];
+}
+
+Game::~Game()
+{
+	for (int i = 0; i < sizeOfArray; i++)
+	{
+		delete objects[i];
+	}
+	delete[] objects;
+}
 
 void Game::addObject(Object *o) {
-    objects[amountOfObjects++] = o;
+    objects[Game::amountOfObjects++] = o;
 }
 
 int *Game::findIdOfStaticObjects(double xMin, double xMax, double yMin, double yMax) {
     int* counter = nullptr;
-    for (int i = 0; i < amountOfObjects; ++i) {
+    for (int i = 0; i < Game::amountOfObjects++; ++i) {
         StaticObject* so = dynamic_cast<StaticObject*>(objects[i]);
         double currentX = objects[i]->getX();
         double currentY = objects[i]->getY();
@@ -26,7 +38,7 @@ int *Game::findIdOfStaticObjects(double xMin, double xMax, double yMin, double y
 MovingObject **Game::findMovingObjectsInArea(double center_x, double center_y, double radius) {
     MovingObject** pMovingObjects = new MovingObject*[3];
     int counter = 0;
-    for (int i = 0; i < amountOfObjects; ++i) {
+    for (int i = 0; i < Game::amountOfObjects++; ++i) {
         MovingObject* mo = dynamic_cast<MovingObject*>(objects[i]);
         if(mo != nullptr) {
             MovingObject *selectedObject = dynamic_cast<MovingObject *>(objects[i]);
@@ -42,7 +54,7 @@ MovingObject **Game::findMovingObjectsInArea(double center_x, double center_y, d
 MovingObject **Game::findMovingObjectsInArea(double center_x, double center_y, double radius, double azimutMin, double azimutMax) {
     MovingObject** pMovingObjects = new MovingObject*[3];
     int counter = 0;
-    for (int i = 0; i < amountOfObjects; ++i) {
+    for (int i = 0; i < Game::amountOfObjects; ++i) {
         MovingObject* mo = dynamic_cast<MovingObject*>(objects[i]);
         if(mo != nullptr) {
             MovingObject *selectedObject = dynamic_cast<MovingObject *>(objects[i]);
