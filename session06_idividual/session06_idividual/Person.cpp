@@ -13,7 +13,7 @@ Person::Person(std::string name, std::string surname, Address houseHold, Date bi
 }
 
 Person::Person()
-{		
+{
 }
 
 std::string Person::getFullName() const
@@ -51,7 +51,12 @@ void Person::setBirthDate(Date birthDate)
 
 std::ostream& operator<<(std::ostream& stream, const Person& person)
 {
-	stream << person.getFullName() << " " << person.getHouseHold() << " " << person.getBirthDate() << std::endl;
+	std::string name = person.getFullName();
+	int size = name.size();
+	char siz = (char)size;
+	stream.write(&siz, sizeof(siz));
+	stream.write(&name[0], size * sizeof(char));
+	stream << person.getHouseHold() << person.getBirthDate();
 	return stream;
 }
 
@@ -62,9 +67,15 @@ std::istream& operator>>(std::istream& stream, Person& person)
 	Address address;
 	Date date;
 
-	stream >> name >> surName >> address >> date;
+	char size;
+	stream.read(&size, sizeof(char));
+	name.resize(size);
+	stream.read(&name[0], size);
 
-	person.setFullName(name, surName);
+	stream >> address;
+	stream >> date;
+
+	person.setFullName(name, "");
 	person.setHouseHold(address);
 	person.setBirthDate(date);
 

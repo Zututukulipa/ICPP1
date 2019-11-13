@@ -1,4 +1,5 @@
 #include "Address.h"
+#include <string>
 
 Address::Address(std::string street, std::string city, int zip)
 {
@@ -46,19 +47,48 @@ void Address::setZip(int newZip)
 
 std::ostream& operator<<(std::ostream& stream, const Address& address)
 {
-	stream << address.getStreet() << " " << address.getZip() << " " << address.getCity();
-	return stream;
+	//stream << address.getStreet() << " " << address.getZip() << " " << address.getCity();
+	std::string stringValue = address.getStreet();
+	int size = stringValue.size();
+	char siz = (char)size;
+	stream.write(&siz, sizeof(size));
+	stream.write((char*)stringValue.c_str(), size * sizeof(char));
 
+
+	int zip = address.getZip();
+	stream.write((char*)&zip, sizeof(int));
+
+	stringValue = address.getCity();
+	size = stringValue.size();
+	siz = (char)size;
+	stream.write(&siz, sizeof(size));
+	stream.write((char*)stringValue.c_str(), size * sizeof(char));
+	return stream;
 }
+
+
 
 std::istream& operator>>(std::istream& stream, Address& address)
 {
 	std::string city;
 	std::string street;
+
+	char size;
+	stream.read(&size, sizeof(int));
+	street.resize(size);
+	stream.read(&street[0], size);
+
+
+	/*stream.read(&tmp, sizeof(tmp));
+	zip = (int)tmp;*/
 	int zip;
+	stream.read((char*)&zip, sizeof(int));
 
-	stream >> street >> city >> zip;
+	stream.read(&size, sizeof(int));
+	city.resize(size);
+	stream.read(&city[0], size);
 
+	//stream >> street >> city >> zip;
 	address.setCity(city);
 	address.setStreet(street);
 	address.setZip(zip);
