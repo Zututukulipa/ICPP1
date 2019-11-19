@@ -1,6 +1,7 @@
 #ifndef MATRIX_H
 #include <iostream>
 #include <exception>
+#include <stdexcept>
 template<typename T>
 class Matrix
 {
@@ -87,6 +88,9 @@ Matrix<T>::~Matrix()
 template<typename T>
 void Matrix<T>::Set(int row, int column, T valueSet)
 {
+	if (row >= rowCount || column >= columnCount || row < 0 || column < 0)
+		throw std::out_of_range("Accessing out of bounds!");
+
 	 this->elements[row][column] = valueSet;
 }
 
@@ -104,6 +108,8 @@ void Matrix<T>::SetFrom(T* arrayUsed)
 template<typename T>
 T& Matrix<T>::GetElement(int row, int column)
 {
+	if(row >= rowCount || column >= columnCount || row < 0 || column < 0)
+		throw std::out_of_range("Accessing out of bounds!");
 	return elements[row][column];
 }
 
@@ -129,6 +135,9 @@ Matrix<T> Matrix<T>::Transpose() const
 template<typename T>
 Matrix<T> Matrix<T>::Multiply(const Matrix& matrix)
 {
+	if (matrix.columnCount != rowCount && matrix.rowCount != columnCount)
+		throw std::invalid_argument("Invalid operation");
+
 	Matrix<T> mult{ rowCount,columnCount };
 	auto temp = 0;
 	for (int i = 0; i < rowCount; ++i)
@@ -156,6 +165,9 @@ Matrix<T> Matrix<T>::Multiply(T scalar)
 template<typename T>
 Matrix<T> Matrix<T>::Add(const Matrix& matrix)
 {
+	if (matrix.rowCount != rowCount && matrix.columnCount != columnCount)
+		throw std::invalid_argument("Invalid operation");
+
 	Matrix<T> sum{ rowCount,columnCount };
 	for (int i = 0; i < rowCount; ++i)
 		for (int j = 0; j < columnCount; ++j)
