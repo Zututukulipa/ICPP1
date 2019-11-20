@@ -81,7 +81,10 @@ Matrix<T>::Matrix(const Matrix<T>& matrixToCopy) {
 template<typename T>
 Matrix<T>::~Matrix()
 {
-
+	for (int i = 0; i < rowCount; i++)
+	{
+		delete[] elements[i];
+	}
 	delete[] elements;
 }
 
