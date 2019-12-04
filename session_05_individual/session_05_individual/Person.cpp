@@ -1,22 +1,25 @@
-#include "Entities.h"
+#include "Person.h"
 
-void Entities::Person::setId(int newId) {
+void Entity::Person::setId(int newId) {
 	id = newId;
 }
-Entities::Person::Person(std::string name, std::string telephone, int id) {
-	this->name = name;
-	this->telephone = telephone;
-	this->id = id;
-}
-void Entities::Person::setName(std::string newName) {
+void Entity::Person::setName(std::string newName) {
 	name = newName;
-}void Entities::Person::setTelephone(std::string newTelephone) {
+}
+void Entity::Person::setTelephone(std::string newTelephone)
+{
 	telephone = newTelephone;
 }
-int Entities::Person::getId() {
+
+int Entity::Person::getId() const {
 	return id;
-}std::string Entities::Person::getName() {
+}
+
+std::basic_string<char> Entity::Person::getName() const
+{
 	return name;
-}std::string Entities::Person::getTelephone() {
+}std::string Entity::Person::getTelephone() const {
 	return telephone;
 }
+
+

@@ -1,28 +1,21 @@
-#include "Entities.h"
-#include <iostream>
+#ifndef PHONEBOOK_H
+#define PHONEBOOK_H
 
-void Model::PhoneBook::addRecord(Entities::Person* addedPerson)
+#include <string>
+#include "Person.h"
+#include "LinkedList.h"
+
+namespace Model
 {
-	first->newRecord(addedPerson);
+	class Phonebook
+	{
+	private:
+		LinkedList first;
+	public:
+		void addPerson(Entity::Person p1);
+		std::string findPhone(std::string name) const;
+		std::string findPhone(int id) const;
+	};
 }
 
- std::string Model::PhoneBook::findContact(std::string contactName) const
-{
-	auto* searchedNode = first->searchRecord(contactName);
-	Entities::Person* foundPerson = dynamic_cast<Entities::Person*>(searchedNode->getData);
-	if (foundPerson != nullptr)
-		return foundPerson->getTelephone();
-	
-	throw(-123);
-}
-
- inline std::string Model::PhoneBook::findContact(int contactId) const
- {
-	 auto* searchedNode = first->searchRecord(contactId);
-	 Entities::Person* foundPerson = dynamic_cast<Entities::Person*>(searchedNode->getData);
-	 if (foundPerson != nullptr)
-		 return foundPerson->getTelephone();
-
-	 throw(-123);
- }
-
+#endif // !PHONEBOOK_H

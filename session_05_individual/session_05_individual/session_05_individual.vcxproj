@@ -123,11 +123,16 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="LinkedList.cpp" />
+    <ClCompile Include="Main.cpp" />
     <ClCompile Include="Person.cpp" />
+    <ClCompile Include="PhoneBook.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Entities.h" />
+    <ClInclude Include="LinkedList.h" />
     <ClInclude Include="Person.h" />
+    <ClInclude Include="PhoneBook.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
