@@ -1,9 +1,9 @@
 #include <iostream>
-#include "Phonebook.h"
+#include "PhoneBook.h"
 #include "Person.h"
 
 int main() {
-	auto* contacts = new Model::Phonebook;
+	auto* contacts = new Model::PhoneBook;
 
 	for (size_t i = 0; i < 150; i++)
 	{

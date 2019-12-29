@@ -11,7 +11,7 @@ private:
 public:
 	~LinkedList();
 	LinkedList();
-	void insertElement(Entity::Person p);
+	void insertElement(Entity::Person person);
 	std::string findElement(std::string searchedName) const;
 	std::string findElement(int contactId) const;
 };

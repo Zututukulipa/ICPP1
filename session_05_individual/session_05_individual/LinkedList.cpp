@@ -20,7 +20,7 @@ LinkedList::~LinkedList()
 		current = current->next;
 	}
 }
-void LinkedList::insertElement(Entity::Person addedPerson)
+void LinkedList::insertElement(const Entity::Person addedPerson)
 {
 	if (addedPerson.getId() < 0 || addedPerson.getName().empty())
 	{
@@ -47,7 +47,7 @@ void LinkedList::insertElement(Entity::Person addedPerson)
 
 }
 
-std::string LinkedList::findElement(std::string searchedName) const
+std::string LinkedList::findElement(const std::string searchedName) const
 {
 	Element* current = nullptr;
 	current = head;

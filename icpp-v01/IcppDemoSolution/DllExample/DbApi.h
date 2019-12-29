@@ -108,6 +108,7 @@ private:
 	int fieldCount{};
 	FieldObject** fields{};
 	int rowCount{};
+	int rowCapacity{};
 	Object*** rows{};
 public:
 	// Vložení nového øádku do tabulky (pole Object* (pro jednotlivé hodnoty sloupeèkù))
@@ -149,8 +150,13 @@ public:
 
 	//Nastavuje jméno tabulky
 	void setTableName(std::string aTableName);
+	void initRows();
+	void freeArray();
+	Object*** allocateNewArray();
+	void copyToNewArray(Object*** tmp);
+	void reallocateArray();
 
-	
+
 	// ============== Bonusové metody: ================
 		// Select s podmínkou
 	//Iterator* select(Condition* condition) { throw 0; }
@@ -164,9 +170,9 @@ public:
 // Databáze
 class DLL_SPEC Db {
 private:
+	std::string focusedFile;
 	std::string databaseName;
 	std::vector<Table*> tables;
-	Table* selectedTable = nullptr;
 public:
 	// Otevøe databázi
 	static Db* open(std::string database);
@@ -175,7 +181,6 @@ public:
 
 	// Vytvoøí novou tabulku
 	Table* createTable(std::string name, int fieldsCount, FieldObject** fields);
-	Table* get_value(std::string name);
 	// Otevøe existující tabulku
 	Table* openTable(std::string name);
 	// Otevøe tabulku (pokud neexistuje, vytvoøí automaticky novou)

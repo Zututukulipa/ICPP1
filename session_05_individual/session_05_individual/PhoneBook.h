@@ -7,7 +7,7 @@
 
 namespace Model
 {
-	class Phonebook
+	class PhoneBook
 	{
 	private:
 		LinkedList first;

@@ -1,0 +1,9 @@
+TEST_TABLE/table;
+int/field/test;int/field/testName;double/field/WhoKnows;string/field/ neco tam bude;
+0/int;2/int;3.1415926589793238/double;testing_test string/string;
+1/int;2/int;3.1415926589793238/double;testing_test string/string;
+2/int;2/int;3.1415926589793238/double;testing_test string/string;
+3/int;2/int;3.1415926589793238/double;testing_test string/string;
+4/int;2/int;3.1415926589793238/double;testing_test string/string;
+5/int;2/int;3.1415926589793238/double;testing_test string/string;
+6/int;2/int;3.1415926589793238/double;testing_test string/string;
