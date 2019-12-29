@@ -21,10 +21,10 @@
     <ClInclude Include="democlass.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="DbApi.h">
+    <ClInclude Include="TableIterator.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="TableIterator.h">
+    <ClInclude Include="DbApi.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -51,6 +51,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="TableIterator.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Object.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Iterator.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

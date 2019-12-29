@@ -1,0 +1,3 @@
+#TEST_TABLE
+int;int;double;string;
+0;2;3.1415926589793238;testing_test string;

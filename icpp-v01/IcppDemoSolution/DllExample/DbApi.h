@@ -21,7 +21,7 @@ enum struct FieldType {
 // Rozhraní vyhovuje základním typùm int, double, string; pro typ „field“ je rozhraní rozšíøeno
 class DLL_SPEC Object {
 public:
-	Object();
+	Object() = default;
 	virtual ~Object();
 
 	// Gettery a settery podle typu
@@ -44,8 +44,8 @@ public:
 class DLL_SPEC IntObject : public Object {
 public:
 	int value;
-	IntObject() : value(0) {}
-	IntObject(int v) : value(v) {}
+	IntObject() : value(0){}
+	IntObject(int v) : value(v){}
 	int getInt()const override;
 	void setInt(int aValue) override;
 };
@@ -91,7 +91,7 @@ public:
 	virtual ~Iterator();
 
 	// Posun na další øádek (vrací true, pokud je iterátor platný; logika podle Java Iterator)
-	virtual bool moveNext() = 0;
+	virtual bool moveNext();
 	// Vrací pole Object* obsahující data øádku
 	virtual Object** getRow() = 0;
 	// Vrací interní rowId aktuálního øádku

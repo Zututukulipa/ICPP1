@@ -30,6 +30,8 @@
     <ClCompile Include="DoubleObject.cpp" />
     <ClCompile Include="FieldObject.cpp" />
     <ClCompile Include="IntObject.cpp" />
+    <ClCompile Include="Iterator.cpp" />
+    <ClCompile Include="Object.cpp" />
     <ClCompile Include="StringDouble.cpp" />
     <ClCompile Include="Table.cpp" />
     <ClCompile Include="TableIterator.cpp" />

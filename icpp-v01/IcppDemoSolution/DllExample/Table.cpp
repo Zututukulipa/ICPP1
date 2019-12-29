@@ -1,4 +1,5 @@
 #include "DbApi.h"
+#include "TableIterator.h"
 
 int Table::getRowCount() const
 {
@@ -68,7 +69,7 @@ void Table::close()
 Iterator* Table::select()
 {
 	//TODO Implement Iterator first.
-	return nullptr;
+	return new TableIterator(rows, rowCount, fieldCount);
 }
 
 void Table::commit()

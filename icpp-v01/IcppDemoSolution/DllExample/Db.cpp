@@ -4,7 +4,8 @@
 Db* Db::open(const std::string databasePath)
 {
 	std::string line;
-	std::ifstream myfile(databasePath);
+	std::ifstream myfile;
+	myfile.open(databasePath, std::ios::in);
 	if (myfile.is_open())
 	{
 		while (getline(myfile, line))
