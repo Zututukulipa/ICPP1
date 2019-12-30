@@ -85,19 +85,19 @@ Table* Db::openTable(std::string name)
 	std::ifstream myfile;
 	Table* table = nullptr;
 	std::string tableName;
-	std::vector<FieldObject*> fieldTypes;
+	std::vector<FieldObject*> *fieldTypes = new std::vector<FieldObject*>;
 	unsigned int currentField = 0;
-	std::vector<Object*> row;
 	std::string cellType;
 	std::string cellContent;
 	bool setup = true;
-
+	std::vector<Object*>* row;
 	myfile.open(focusedFile, std::ios::in);
 	if (myfile.is_open())
 	{
 		while (!myfile.eof())
 		{
 			auto result = getNextLineAndSplitIntoTokens(myfile);
+			row = new std::vector<Object*>;
 
 			for (unsigned int i = 0; i < result.size() - 1; ++i)
 			{
@@ -113,24 +113,29 @@ Table* Db::openTable(std::string name)
 					if (cellType == "field")
 					{
 						if (cellContent == "int")
-							fieldTypes.push_back(new FieldObject(splitField[2], FieldType::Integer));
+							fieldTypes->push_back(new FieldObject(splitField[2], FieldType::Integer));
 						else if (cellContent == "double")
-							fieldTypes.push_back(new FieldObject(splitField[2], FieldType::Double));
+							fieldTypes->push_back(new FieldObject(splitField[2], FieldType::Double));
 						else if (cellContent == "string")
-							fieldTypes.push_back(new FieldObject(splitField[2], FieldType::String));
+							fieldTypes->push_back(new FieldObject(splitField[2], FieldType::String));
 						++currentField;
 					}
 					else if (cellType == "int" && i < currentField)
 					{
-						row.push_back(new IntObject(std::stoi(cellContent)));
+						int val = std::stoi(cellContent);
+						auto iObj = new IntObject(val);
+						row->push_back(iObj);
 					}
 					else if (cellType == "double" && i < currentField)
 					{
-						row.push_back(new DoubleObject(std::stod(cellContent)));
+						double val = std::stod(cellContent);
+						auto dObj = new DoubleObject(val);
+						row->push_back(dObj);
 					}
 					else if (cellType == "string" && i < currentField)
 					{
-						row.push_back(new StringObject(cellContent));
+						auto sObj = new StringObject(cellContent);
+						row->push_back(sObj);
 					}
 				}
 			}
@@ -141,18 +146,23 @@ Table* Db::openTable(std::string name)
 			}
 			else if (table->getFieldCount() == 0)
 			{
-				table->setFields(&fieldTypes[0]);
+				table->setFields(&*fieldTypes->begin());
 				table->setFieldCount(currentField);
 
 			}
-			else if (table != nullptr)
-				table->insert(&row[0]);
+			else if (table != nullptr) {
+				if (!row->empty())
+					table->insert(&*row->begin());
+				else
+					delete row;
+			}
 		}
 		myfile.close();
 	}
 	else
 		std::cout << "Unable to open file";
-	tables.push_back(table);
+	if(table != nullptr)
+		tables.push_back(table);
 	return table;
 }
 

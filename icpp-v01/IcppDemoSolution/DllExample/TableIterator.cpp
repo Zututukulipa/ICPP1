@@ -14,7 +14,7 @@ bool TableIterator::moveNext()
 
 Object** TableIterator::getRow()
 {
-	return rows[currentRow];
+	return rows[currentRow++];
 }
 
 int TableIterator::getRowId()

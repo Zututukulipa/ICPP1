@@ -45,7 +45,7 @@ class DLL_SPEC IntObject : public Object {
 public:
 	int value;
 	IntObject() : value(0){}
-	IntObject(int v) : value(v){}
+	IntObject(int v);
 	int getInt()const override;
 	void setInt(int aValue) override;
 };
@@ -54,7 +54,7 @@ class DLL_SPEC DoubleObject : public Object {
 public:
 	double value;
 	DoubleObject() : value(0.0) {}
-	DoubleObject(double v) : value(v) {}
+	DoubleObject(double v);
 	double getDouble() const override;
 	void setDouble(double aValue) override;
 };
@@ -63,7 +63,7 @@ class DLL_SPEC StringObject : public Object {
 public:
 	std::string value;
 	StringObject() : value("") {}
-	StringObject(std::string v) : value(v) {}
+	StringObject(std::string v);
 	std::string getString() const override;
 	void setString(std::string aValue) override;
 };
@@ -74,7 +74,7 @@ public:
 	std::string name;
 	FieldType type;
 	FieldObject();
-	FieldObject(std::string name, FieldType type) :name(name), type(type) {}
+	FieldObject(std::string name, FieldType type);
 
 	bool isType(FieldType compType) const override;
 
@@ -150,8 +150,7 @@ public:
 
 	//Nastavuje jméno tabulky
 	void setTableName(std::string aTableName);
-	void initRows();
-	void freeArray();
+	Object*** initRows();
 	Object*** allocateNewArray();
 	void copyToNewArray(Object*** tmp);
 	void reallocateArray();

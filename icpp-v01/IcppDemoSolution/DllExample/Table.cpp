@@ -46,23 +46,33 @@ void Table::setTableName(std::string aTableName)
 	name = aTableName;
 }
 
-void Table::initRows()
+Object*** Table::initRows()
 {
 	rowCapacity = 5;
-	rows = new Object** [rowCapacity];
-	for (int i = 0; i < rowCapacity; ++i)
-		rows[i] = new Object*[fieldCount];
-}
 
-void Table::freeArray()
-{
-	for (int i = 0; i < rowCapacity; ++i) {
-		for (int j = 0; j < fieldCount; ++j)
-		{
-			delete rows[i][j];
+	rows = new Object **[rowCapacity];
+	for (int i = 0; i < rowCount; ++i) {
+		rows[i] = new Object*[fieldCount];
+	}
+
+	// Null out the pointers contained in the array:
+	for (int i = 0; i < rowCount; ++i) {
+		for (int j = 0; j < fieldCount; ++j) {
+			rows[i][j] = NULL;
 		}
 	}
-	delete[] rows;
+	return rows;
+}
+
+void freeArray(Object*** tmp, int rowCount, int columnCount)
+{
+	for (int i = 0; i < rowCount; ++i) {
+		for (int j = 0; j < columnCount; ++j)
+		{
+			delete tmp[i][j];
+		}
+	}
+	delete[] tmp;
 }
 
 Object*** Table::allocateNewArray()
@@ -90,9 +100,8 @@ void Table::reallocateArray()
 
 	copyToNewArray(tmp);
 
-	//freeArray();
-		
-	rowCapacity = rowCapacity * 2;
+	freeArray(rows, rowCount, fieldCount);
+	rowCapacity *= 2;
 	rows = tmp;
 }
 
@@ -106,7 +115,9 @@ void Table::insert(Object** row)
 	{
 		reallocateArray();
 	}
-	this->rows[rowCount++] = row;
+	
+	rows[rowCount++] = row;
+	
 }
 
 void Table::remove(int rowid)
