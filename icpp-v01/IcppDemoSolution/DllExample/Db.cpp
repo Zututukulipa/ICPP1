@@ -40,10 +40,25 @@ std::vector<std::string> getNextLineAndSplitIntoTokens(std::istream& str)
 	return result;
 }
 
-void parseLine(const std::vector<std::basic_string<char>>& source)
+std::vector<std::string> Db::readDbNames()
 {
+	//TODO ukladat do struktury
+	std::vector<std::string> lines;
+	std::string line;
+	std::ifstream myfile(getDatabaseName()+".txt");
+	if (myfile.is_open())
+	{
+		while (!myfile.eof())
+		{
+			myfile >> line;
+			lines.push_back(line);
+		}
+		myfile.close();
+		return lines;
+	}
 
-
+	std::cout << "Unable to open file";
+	return lines;
 }
 
 Db* Db::open(const std::string databasePath)
@@ -58,9 +73,11 @@ void Db::close()
 {
 	for (unsigned int i = 0; i < this->tables.size(); ++i)
 	{
+		tables[i]->close();
 		delete tables[i];
 	}
-	std::cout << "Table Closed." << std::endl;
+	tables.clear();
+	std::cout << "Database Closed." << std::endl;
 }
 
 Table* Db::createTable(std::string tableName, int fieldAmount, FieldObject** tableFields)
@@ -75,23 +92,46 @@ Table* Db::createTable(std::string tableName, int fieldAmount, FieldObject** tab
 }
 
 
-Table* Db::openTable(std::string name)
+Table* Db::searchOpenedTables(std::string name)
 {
 	for (unsigned int i = 0; i < this->tables.size(); ++i)
 	{
-		if (tables[i]->getDatabaseName() == name)
+		if (tables[i]->getTableName() == name)
+		{
 			return tables[i];
+		}
 	}
+	return nullptr;
+}
+
+Table* Db::openTable(std::string name)
+{
+	auto searchResult = searchOpenedTables(name);
+	
+	if (searchResult != nullptr)
+		return searchResult;
+	
+	auto res = readDbNames();
+	bool found = false;
+	for (int i = 0; i < res.size(); ++i)
+	{
+		if (res[i] == name)
+			found = true;
+	}
+	if (!found)
+		return nullptr;
+	
 	std::ifstream myfile;
-	Table* table = nullptr;
-	std::string tableName;
-	std::vector<FieldObject*> *fieldTypes = new std::vector<FieldObject*>;
+	Table* table = new Table;
+	table->setDatabaseName(databaseName);
+	table->setTableName(name);
+	std::string tableName = name;
+	auto fieldTypes = new std::vector<FieldObject*>;
 	unsigned int currentField = 0;
 	std::string cellType;
 	std::string cellContent;
-	bool setup = true;
 	std::vector<Object*>* row;
-	myfile.open(focusedFile, std::ios::in);
+	myfile.open(name+".txt", std::ios::in);
 	if (myfile.is_open())
 	{
 		while (!myfile.eof())
@@ -104,12 +144,11 @@ Table* Db::openTable(std::string name)
 				auto splitField = split(result[i], "/");
 				cellContent = splitField[0];
 				cellType = splitField[1];
-				if (cellType == "table" && cellContent == name)
-				{
-					table = new Table();
-					tableName = cellContent;
-					break;
-				}if (!tableName.empty()) {
+				if (!tableName.empty()) {
+					if (cellType == "NULL") {
+						row->push_back(nullptr);
+						continue;
+					}
 					if (cellType == "field")
 					{
 						if (cellContent == "int")
@@ -139,12 +178,7 @@ Table* Db::openTable(std::string name)
 					}
 				}
 			}
-			if (setup) {
-				table->setTableName(tableName);
-				table->setDatabaseName(databaseName);
-				setup = false;
-			}
-			else if (table->getFieldCount() == 0)
+			if (table->getFields() == nullptr)
 			{
 				table->setFields(&*fieldTypes->begin());
 				table->setFieldCount(currentField);
@@ -153,9 +187,10 @@ Table* Db::openTable(std::string name)
 			else if (table != nullptr) {
 				if (!row->empty())
 					table->insert(&*row->begin());
-				else
-					delete row;
+				
 			}
+			if(row->empty())
+				delete row;
 		}
 		myfile.close();
 	}
@@ -176,7 +211,6 @@ Table* Db::openOrCreateTable(std::string name, int fieldsCount, FieldObject** fi
 		table->setTableName(name);
 		table->setFieldCount(fieldsCount);
 		table->setFields(fields);
-		return table;
 	}
 	return table;
 }

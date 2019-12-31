@@ -5,4 +5,5 @@ int/field/test;int/field/testName;double/field/WhoKnows;string/field/ neco tam b
 3/int;2/int;3.141593/double;testing_test string/string;
 4/int;2/int;3.141593/double;testing_test string/string;
 5/int;2/int;3.141593/double;testing_test string/string;
-666/int;123/int;11.010000/double;Added String Via Database/string;
+0/int;0/int;0.000000/double;/string;
+333/int;321/int;20.010000/double;Added String Via Database YEEEEY/string;

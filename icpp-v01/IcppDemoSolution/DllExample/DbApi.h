@@ -20,6 +20,8 @@ enum struct FieldType {
 // Polymorfní datový objekt (reprezentuje jednu datovou hodnotu v tabulce)
 // Rozhraní vyhovuje základním typùm int, double, string; pro typ „field“ je rozhraní rozšíøeno
 class DLL_SPEC Object {
+protected:
+	FieldType type;
 public:
 	Object() = default;
 	virtual ~Object();
@@ -44,7 +46,7 @@ public:
 class DLL_SPEC IntObject : public Object {
 public:
 	int value;
-	IntObject() : value(0){}
+	IntObject();
 	IntObject(int v);
 	int getInt()const override;
 	void setInt(int aValue) override;
@@ -53,7 +55,7 @@ public:
 class DLL_SPEC DoubleObject : public Object {
 public:
 	double value;
-	DoubleObject() : value(0.0) {}
+	DoubleObject();
 	DoubleObject(double v);
 	double getDouble() const override;
 	void setDouble(double aValue) override;
@@ -62,7 +64,7 @@ public:
 class DLL_SPEC StringObject : public Object {
 public:
 	std::string value;
-	StringObject() : value("") {}
+	StringObject();
 	StringObject(std::string v);
 	std::string getString() const override;
 	void setString(std::string aValue) override;
@@ -119,6 +121,8 @@ public:
 	// Select – vytvoøí iterátor k procházení tabulky
 	Iterator* select();
 
+	bool inIndexedInFile(std::string line, std::ifstream myfile);
+	void writeDataToTable();
 	// Commit – pøenese zmìny z pamìti do datových souborù
 	void commit();
 
@@ -154,6 +158,7 @@ public:
 	Object*** allocateNewArray();
 	void copyToNewArray(Object*** tmp);
 	void reallocateArray();
+	std::vector<std::string> readDbNames();
 
 
 	// ============== Bonusové metody: ================
@@ -173,6 +178,7 @@ private:
 	std::string databaseName;
 	std::vector<Table*> tables;
 public:
+	std::vector<std::string> readDbNames();
 	// Otevøe databázi
 	static Db* open(std::string database);
 	// Uzavøe databázi (dealokuje pamìové prostøedky)
@@ -180,6 +186,7 @@ public:
 
 	// Vytvoøí novou tabulku
 	Table* createTable(std::string name, int fieldsCount, FieldObject** fields);
+	Table* searchOpenedTables(std::string name);
 	// Otevøe existující tabulku
 	Table* openTable(std::string name);
 	// Otevøe tabulku (pokud neexistuje, vytvoøí automaticky novou)
@@ -194,25 +201,19 @@ public:
 	// Alokuje objekt „int“
 	static Object* Int(int value)
 	{
-		Object* obj = new IntObject();
-		obj->setInt(value);
-		return obj;
+		return new IntObject(value);
 	}
 
 	// Alokuje objekt „double“
 	static Object* Double(double value)
 	{
-		Object* obj = new DoubleObject();
-		obj->setDouble(value);
-		return obj;
+		return new DoubleObject(value);
 	}
 
 	// Alokuje objekt „string“
 	static Object* String(std::string value)
 	{
-		Object* obj = new StringObject();
-		obj->setString(value);
-		return obj;
+		return new StringObject(value);
 	}
 
 	// Alokuje objekt „field“
