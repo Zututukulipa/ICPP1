@@ -1,6 +1,7 @@
 #include "Menu.h"
 #include <iostream>
 #include <sstream>
+#include "TableIterator.h"
 
 void Menu::render_menu()
 {
@@ -15,6 +16,7 @@ void Menu::render_menu()
 		<< std::endl << "7\tDisplay Tables"
 		<< std::endl << "8\tDisplay Saved Table Content"
 		<< std::endl << "9\tCommit Table"
+		<< std::endl << "10\tDisplay Selected Table"
 		<< std::endl << "Enter Option:"
 		<< std::endl << ">";
 	std::cin >> option;
@@ -103,11 +105,9 @@ void Menu::render_menu()
 			int iValue = 0;
 			double dValue = 0;
 			std::string sValue;
-			char type = 'n';
 			switch (activeTable->getFields()[i]->type)
 			{
 			case FieldType::Integer:
-				type = 'i';
 				std::cout << activeTable->getFields()[i]->name << " [INTEGER]" << std::endl << "Enter Value:" << std
 					::
 					endl;
@@ -115,7 +115,6 @@ void Menu::render_menu()
 				row[i] = Db::Int(iValue);
 				break;
 			case FieldType::Double:
-				type = 'd';
 				std::cout << activeTable->getFields()[i]->name << " [DOUBLE]" << std::endl << "Enter Value:" << std
 					::
 					endl;
@@ -123,7 +122,6 @@ void Menu::render_menu()
 				row[i] = Db::Double(dValue);
 				break;
 			case FieldType::String:
-				type = 's';
 				std::cout << activeTable->getFields()[i]->name << " [STRING]" << std::endl << "Enter Value:" << std
 					::
 					endl;
@@ -137,12 +135,14 @@ void Menu::render_menu()
 		std::cout << "Row added." << std::endl;
 		break;
 	case 5:
-		if (activeTable != nullptr) {
+		if (activeTable != nullptr)
+		{
 			std::cout << "Enter Row ID:" << std::endl;
 			std::cin >> option;
 			activeTable->remove(option);
 			std::cout << "Row removed" << std::endl;
-		}else
+		}
+		else
 		{
 			std::cout << "Open a Table first" << std::endl;
 		}
@@ -150,7 +150,8 @@ void Menu::render_menu()
 	case 6:
 		break;
 	case 7:
-		if (database != nullptr) {
+		if (database != nullptr)
+		{
 			myfile.open(database->getDatabaseName() + ".txt");
 			if (myfile.is_open())
 			{
@@ -166,21 +167,21 @@ void Menu::render_menu()
 		{
 			std::cout << "First open a Database" << std::endl;
 		}
-		
+
 		break;
 	case 8:
-		if (database != nullptr) {
-
-		myfile.open(database->getDatabaseName() + ".txt");
-		if (myfile.is_open())
+		if (database != nullptr)
 		{
-			while (getline(myfile, stringLine))
+			myfile.open(database->getDatabaseName() + ".txt");
+			if (myfile.is_open())
 			{
-				readTable(stringLine);
-				stringLine.clear();
+				while (getline(myfile, stringLine))
+				{
+					readTable(stringLine);
+					stringLine.clear();
+				}
+				myfile.close();
 			}
-			myfile.close();
-		}
 		}
 		else
 		{
@@ -191,11 +192,22 @@ void Menu::render_menu()
 		if (activeTable != nullptr)
 			activeTable->commit();
 		break;
+	case 10:
+		if (activeTable != nullptr)
+		{
+			TableIterator* it = static_cast<TableIterator*>(activeTable->select());
+			while (it->moveNext())
+			{
+				auto row = it->getRow();
+
+				write_out_row(activeTable->getFieldCount(), row);
+			}
+		}
+		break;
 	default:
-		if(activeTable != nullptr)
-			activeTable->close();
-		if(database != nullptr)
+		if (database != nullptr)
 			database->close();
+		_CrtDumpMemoryLeaks();
 		exit(0);
 	}
 }
@@ -207,7 +219,9 @@ void Menu::readTable(const std::string& cs)
 	std::string cellContent;
 	int currentField = 0;
 	myfile.open(cs + ".txt", std::ios::in);
-	std::cout << cs << std::endl << "=================================================================================================" << std::endl;
+	std::cout << cs << std::endl <<
+		"=================================================================================================" << std::
+		endl;
 	if (myfile.is_open())
 	{
 		while (!myfile.eof())
@@ -233,14 +247,15 @@ void Menu::readTable(const std::string& cs)
 				}
 				else
 				{
-					std::cout << "|" <<splitField[0] << "|" << "\t";
+					std::cout << "|" << splitField[0] << "|" << "\t";
 				}
 			}
 			std::cout << std::endl;
 		}
 		myfile.close();
-		std::cout << std::endl << "=================================================================================================" << std::endl;
-
+		std::cout << std::endl <<
+			"=================================================================================================" << std::
+			endl;
 	}
 	else
 		std::cout << "Unable to open file";
@@ -257,11 +272,12 @@ std::vector<std::string> Menu::split(const std::string& str, const std::string& 
 		std::string token = str.substr(prev, pos - prev);
 		if (!token.empty()) tokens.push_back(token);
 		prev = pos + delim.length();
-	} while (pos < str.length() && prev < str.length());
+	}
+	while (pos < str.length() && prev < str.length());
 	return tokens;
 }
 
-std::vector<std::string> Menu::getNextLineAndSplitIntoTokens(std::istream& str)
+std::vector<std::string> Menu::getNextLineAndSplitIntoTokens(std::istream& str) const
 {
 	std::vector<std::string> result;
 	std::string line;
@@ -274,18 +290,16 @@ std::vector<std::string> Menu::getNextLineAndSplitIntoTokens(std::istream& str)
 	{
 		result.push_back(cell);
 	}
-	// This checks for a trailing comma with no data after it.
 	if (!lineStream && cell.empty())
 	{
-		// If there was a trailing comma then add an empty element.
 		result.push_back("");
 	}
 	return result;
 }
 
-void Menu::write_out_row(Table* tab, Object** row)
+void Menu::write_out_row(int fieldCount, Object** row)
 {
-	for (int i = 0; i < tab->getFieldCount(); ++i)
+	for (int i = 0; i < fieldCount; ++i)
 	{
 		if (row[i] != nullptr)
 		{
@@ -295,11 +309,11 @@ void Menu::write_out_row(Table* tab, Object** row)
 			}
 			else if ((FieldObject*)row[i]->isType(FieldType::Double))
 			{
-				std::cout << static_cast<IntObject*>(row[i])->value << "\t";
+				std::cout << static_cast<DoubleObject*>(row[i])->value << "\t";
 			}
 			else if ((FieldObject*)row[i]->isType(FieldType::String))
 			{
-				std::cout << static_cast<IntObject*>(row[i])->value << "\t";
+				std::cout << static_cast<StringObject*>(row[i])->value << "\t";
 			}
 		}
 		else
@@ -307,4 +321,5 @@ void Menu::write_out_row(Table* tab, Object** row)
 			std::cout << "|_NULL_|" << std::endl;
 		}
 	}
+	std::cout << std::endl;
 }

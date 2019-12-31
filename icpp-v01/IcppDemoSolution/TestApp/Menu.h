@@ -17,7 +17,7 @@ public:
 	void render_menu();
 	void readTable(const std::string& cs);
 	std::vector<std::string> split(const std::string& str, const std::string& delim);
-	std::vector<std::string> getNextLineAndSplitIntoTokens(std::istream& str);
-	void write_out_row(Table* tab, Object** row);
+	std::vector<std::string> getNextLineAndSplitIntoTokens(std::istream& str) const;
+	void write_out_row(int fieldCount, Object** row);
 };
 

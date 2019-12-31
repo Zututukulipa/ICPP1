@@ -138,7 +138,7 @@ void Table::remove(int rowid)
 			else if (cell->isType(FieldType::Double))
 				cell->setDouble(0.0);
 			else if (cell->isType(FieldType::String))
-				cell->setString("");
+				cell->setString("NIL");
 		}
 	}
 	std::cout << "Index out of bounds, skipping operation." << std::endl;
@@ -146,11 +146,10 @@ void Table::remove(int rowid)
 
 void Table::close()
 {
-	for (int rowId = 0; rowId < rowCount; ++rowId)
-		for (int column = 0; column < fieldCount; ++column)
-			delete rows[rowId][column];
+	for (int i = 0; i < fieldCount; ++i) {
+		delete[] rows[i];
+	}
 	delete[] rows;
-	delete[] fields;
 }
 
 Iterator* Table::select()

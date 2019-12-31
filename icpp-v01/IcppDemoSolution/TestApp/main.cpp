@@ -1,12 +1,4 @@
-#include <democlass.h>
-#include <DbApi.h>
-#include "TableIterator.h"
-#include <iostream>
-#include <sstream>
 #include "Menu.h"
-
-
-
 
 int main()
 {

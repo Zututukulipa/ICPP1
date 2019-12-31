@@ -1,4 +1,4 @@
 int/field/UserID;string/field/UserName;double/field/Balance;
 0/int;Karel/string;38000.000000/double;
-0/int;/string;0.000000/double;
+0/int;NIL/string;0.000000/double;
 1/int;Josef/string;9999.000000/double;
