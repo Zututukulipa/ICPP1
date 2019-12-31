@@ -94,11 +94,13 @@ Table* Db::createTable(std::string tableName, int fieldAmount, FieldObject** tab
 
 Table* Db::searchOpenedTables(std::string name)
 {
-	for (unsigned int i = 0; i < this->tables.size(); ++i)
-	{
-		if (tables[i]->getTableName() == name)
+	if (!tables.empty()) {
+		for (unsigned int i = 0; i < this->tables.size(); ++i)
 		{
-			return tables[i];
+			if (tables[i]->getTableName() == name)
+			{
+				return tables[i];
+			}
 		}
 	}
 	return nullptr;
@@ -115,8 +117,10 @@ Table* Db::openTable(std::string name)
 	bool found = false;
 	for (int i = 0; i < res.size(); ++i)
 	{
-		if (res[i] == name)
+		if (res[i] == name) {
 			found = true;
+			break;
+		}
 	}
 	if (!found)
 		return nullptr;
@@ -157,6 +161,8 @@ Table* Db::openTable(std::string name)
 							fieldTypes->push_back(new FieldObject(splitField[2], FieldType::Double));
 						else if (cellContent == "string")
 							fieldTypes->push_back(new FieldObject(splitField[2], FieldType::String));
+						else if (cellContent == "key")
+							fieldTypes->push_back(new FieldObject(splitField[2]+"_FK", FieldType::Field));
 						++currentField;
 					}
 					else if (cellType == "int" && i < currentField)

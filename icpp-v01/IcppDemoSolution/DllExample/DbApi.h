@@ -112,6 +112,12 @@ private:
 	int rowCount{};
 	int rowCapacity{};
 	Object*** rows{};
+	void copyToNewArray(Object*** tmp);
+	std::vector<std::string> readDbNames();
+	void reallocateArray();
+	Object*** initRows();
+	Object*** allocateNewArray();
+
 public:
 	// Vložení nového øádku do tabulky (pole Object* (pro jednotlivé hodnoty sloupeèkù))
 	void insert(Object** row);
@@ -154,11 +160,6 @@ public:
 
 	//Nastavuje jméno tabulky
 	void setTableName(std::string aTableName);
-	Object*** initRows();
-	Object*** allocateNewArray();
-	void copyToNewArray(Object*** tmp);
-	void reallocateArray();
-	std::vector<std::string> readDbNames();
 
 
 	// ============== Bonusové metody: ================

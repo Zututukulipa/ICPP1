@@ -1,0 +1,6 @@
+int/field/IDBank;string/field/Name;string/field/Code;
+0/int;First Intergalactic Bank/string;01IGBl/string;
+1/int;Imperial Bank of England/string;IBoE/string;
+2/int;BOMZ/string;B0MZ/string;
+3/int;Ceska Zalozna/string;CZZ/string;
+4/int;TatraSporitelna/string;TSK/string;

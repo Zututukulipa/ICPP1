@@ -19,7 +19,7 @@ Object** TableIterator::getRow()
 
 int TableIterator::getRowId()
 {
-	return currentRow;
+	return currentRow-1;
 }
 
 void TableIterator::close()

@@ -1,0 +1,6 @@
+int/field/IDAccount;double/field/Balance;key/field/USER;int/field/BankID;
+0/int;25000.00/double;0/int;0/int;
+1/int;3267.37/double;0/int;1/int;
+2/int;123900.41/double;2/int;4/int;
+3/int;23.12/double;3/int;0/int;
+4/int;18524.00/double;4/int;2/int;

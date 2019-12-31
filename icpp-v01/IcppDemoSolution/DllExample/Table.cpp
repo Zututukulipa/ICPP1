@@ -129,16 +129,19 @@ void Table::insert(Object** row)
 
 void Table::remove(int rowid)
 {
-	for (int column = 0; column < fieldCount; ++column)
-	{
-		auto cell = rows[rowid][column];
-		if (cell->isType(FieldType::Integer))
-			cell->setInt(0);
-		else if (cell->isType(FieldType::Double))
-			cell->setDouble(0.0);
-		else if (cell->isType(FieldType::String))
-			cell->setString("");
+	if (rowid <= rowCount && rowid > 0) {
+		for (int column = 0; column < fieldCount; ++column)
+		{
+			auto cell = rows[rowid][column];
+			if (cell->isType(FieldType::Integer))
+				cell->setInt(0);
+			else if (cell->isType(FieldType::Double))
+				cell->setDouble(0.0);
+			else if (cell->isType(FieldType::String))
+				cell->setString("");
+		}
 	}
+	std::cout << "Index out of bounds, skipping operation." << std::endl;
 }
 
 void Table::close()
